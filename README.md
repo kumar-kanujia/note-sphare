@@ -1,2 +1,2 @@
-# note-sphere
+# note-sphare
 A note taking web app
