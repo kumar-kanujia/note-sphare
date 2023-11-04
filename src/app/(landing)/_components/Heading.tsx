@@ -1,9 +1,15 @@
 "use client";
 
+import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
+import { SignInButton } from "@clerk/nextjs";
+import { useConvexAuth } from "convex/react";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 const Heading = () => {
+  const { isLoading, isAuthenticated } = useConvexAuth();
+
   return (
     <header className="max-w-3xl space-y-4">
       <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold">
@@ -15,10 +21,24 @@ const Heading = () => {
         <br />
         better faster and more efficient work happens.
       </h3>
-      <Button>
-        Create
-        <ArrowRight className="h-4 w-4 ml-2" />
-      </Button>
+      {isLoading && (
+        <div className="w-full flex items-center justify-center">
+          <Spinner />
+        </div>
+      )}
+      {isAuthenticated && !isLoading && (
+        <Button asChild>
+          <Link href="/documents">
+            Create
+            <ArrowRight className="h-4 w-4 ml-2" />
+          </Link>
+        </Button>
+      )}
+      {!isAuthenticated && !isLoading && (
+        <SignInButton mode="modal">
+          <Button>Get Note Sphare</Button>
+        </SignInButton>
+      )}
     </header>
   );
 };
