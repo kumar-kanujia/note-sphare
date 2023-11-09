@@ -1,12 +1,11 @@
 "use client";
 import { toast } from "sonner";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import {
   ChevronsLeft,
   MenuIcon,
   Plus,
   PlusCircle,
-  PlusIcon,
   Search,
   Settings,
   Trash,
@@ -35,6 +34,7 @@ const Navigation = () => {
   const params = useParams();
   const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const router = useRouter();
 
   const isResizingRef = useRef(false);
   const sidebarRef = useRef<ElementRef<"aside">>(null);
@@ -122,7 +122,9 @@ const Navigation = () => {
   }, [pathname, isMobile]);
 
   const handleCreate = () => {
-    const promise = create({ title: "Untitled" });
+    const promise = create({ title: "Untitled" }).then((documentId) =>
+      router.push(`/documents/${documentId}`)
+    );
     toast.promise(promise, {
       loading: "Creating Note...",
       success: "Note Created!",
